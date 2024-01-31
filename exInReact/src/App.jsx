@@ -17,6 +17,7 @@ function App() {
     }
   }
 
+  //debounce wrapper function - useCallback
   //debounce wrapper function
   const reqAPI = useMemo(() => {
     return debounce((e) => {
@@ -43,6 +44,39 @@ function App() {
 
     reqAPI(e);
   }
+
+
+
+  //debounce wrapper function - useCallback
+  //memoize the debounce function using useMemo
+  // const debouncedCallback = useMemo(() => debounce((value) => {
+  //   fetch(
+  //     'https://dummyjson.com/users/search?' +
+  //     new URLSearchParams({
+  //       q: value,
+  //     })
+  //   )
+  //     .then((res) => res.json())
+  //     .then((res) => {
+  //       setResult(res?.users);
+  //     })
+  //     .catch((err) => {
+  //       console.error("Error: " + err);
+  //     });
+  // }, 1000), []);
+
+  // const reqAPI = useCallback(
+  //   (value) => debouncedCallback(value),
+  //   [debouncedCallback]
+  // );
+
+  // const handleSearchChange = (e) => {
+  //   e.preventDefault();
+  //   const value = e.target.value.trim();
+  //   setSearchText(value);
+
+  //   reqAPI(value);
+  // };
 
   console.log("Hello user", results)
 
