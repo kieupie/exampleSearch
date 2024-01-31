@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useMemo, useState } from 'react';
 import './App.css';
 
 function App() {
@@ -17,24 +17,31 @@ function App() {
     }
   }
 
+  //debounce wrapper function
+  const reqAPI = useMemo(() => {
+    return debounce((e) => {
+      fetch(
+        'https://dummyjson.com/users/search?' +
+        new URLSearchParams({
+          q: e.target.value,
+        })
+      )
+        .then((res) => res.json())
+        .then((res) => {
+          setResult(res?.users);
+        })
+        .catch((err) => {
+          console.error("Error: " + err);
+        });
+    }, 1000);
+  }, [])
+
 
   const handleSearchChange = (e) => {
     e.preventDefault();
     setSearchText(e.target.value.trim());
 
-    fetch(
-      'https://dummyjson.com/users/search?' +
-      new URLSearchParams({
-        q: e.target.value,
-      })
-    )
-      .then((res) => res.json())
-      .then((res) => {
-        setResult(res?.users);
-      })
-      .catch((err) => {
-        console.error("Error: " + err);
-      });
+    reqAPI(e);
   }
 
   console.log("Hello user", results)
@@ -87,7 +94,7 @@ function App() {
           name="search_text"
           id="search-field"
           value={searchText}
-          onChange={debounce(handleSearchChange, 1000)}
+          onChange={handleSearchChange}
         />
         <a href="#">
           <img
