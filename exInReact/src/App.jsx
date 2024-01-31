@@ -6,6 +6,17 @@ function App() {
   const [results, setResult] = useState([]);
   const [searchText, setSearchText] = useState('');
 
+  const debounce = (callback, delay) => {
+    let timeOut = null;
+
+    return (...args) => {
+      clearTimeout(timeOut);
+      timeOut = setTimeout(() => {
+        callback(...args);
+      }, delay);
+    }
+  }
+
 
   const handleSearchChange = (e) => {
     e.preventDefault();
@@ -76,7 +87,7 @@ function App() {
           name="search_text"
           id="search-field"
           value={searchText}
-          onChange={handleSearchChange}
+          onChange={debounce(handleSearchChange, 1000)}
         />
         <a href="#">
           <img
