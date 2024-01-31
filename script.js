@@ -17,6 +17,33 @@ const debounce = (callback, delay) => {
     }
 }
 
+const throttle = (callback, delay) => {
+    let timeWait = false;
+    let lastArgs = null;
+
+    return (...args) => {
+        if (timeWait) {
+            //Trigger first event handlers
+            lastArgs = e;
+            return;
+        }
+
+        callback(...args);
+
+        timeWait = true;
+        setTimeout(() => {
+            if (lastArgs === null) {
+                timeWait = false;
+            } else {
+                timeWait = false;
+                callback(...lastArgs)
+                lastArgs = null;
+            }
+        }, delay)
+
+    }
+}
+
 //Debounce
 const handleSearchChange1 = (e) => {
     const searchTerm = e.target.value.trim() || '';
@@ -114,4 +141,5 @@ const handleSearchChange2 = (e) => {
 
 document.getElementById('search-field')
     // .addEventListener('input', debounce(handleSearchChange1, 1000));
-    .addEventListener('input', handleSearchChange2);
+    .addEventListener('input', throttle(handleSearchChange1, 1000));
+    // .addEventListener('input', handleSearchChange2);
